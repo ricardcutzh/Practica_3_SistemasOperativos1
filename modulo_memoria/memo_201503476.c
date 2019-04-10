@@ -20,7 +20,8 @@
     * ESTA ESTRUCTURA TIENE LA INFORMACION DEL DIRECTORIO PROC
 */
 struct proc_dir_entry *proc_file;
-
+static char procfs_buffer[PROCFS_MAX_SIZE];
+static unsigned long procfs_buffer_size = 0;
 /*
     * FUNCION LLAMADA AL MOMENTO DE QUE SE ESCRIBA EL ARCHIVO EN EL PROC
     *  
