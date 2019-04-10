@@ -14,6 +14,8 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/proc_fs.h>
+#include <asm/uaccess.h> /* for copy_from_user */
+#define PROCFS_MAX_SIZE 1024
 
 #define procfs_nombre "mem_201503476"
 /*
