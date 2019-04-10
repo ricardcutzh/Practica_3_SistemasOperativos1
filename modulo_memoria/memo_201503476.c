@@ -25,6 +25,26 @@ struct proc_dir_entry *proc_file;
 static char procfs_buffer[PROCFS_MAX_SIZE];
 static unsigned long procfs_buffer_size = 0;
 /*
+    * FUNCION QUE ES LLAMADA CUANDO EL ARCHIVO PROC ES LEIDO
+*/
+int procfile_read(char *buffer, char **buffer_location, off_t offset, int buffer_length, int *eof, void *data)
+{
+    int ret;
+    printk(KERN_INFO "procfile_read (/proc/%s) called\n", PROCFS_NAME);
+    if (offset > 0) {
+        /* we have finished to read, return 0 */
+        ret = 0;
+    }
+    else {
+        /* fill the buffer, return the buffer size */
+        memcpy(buffer, procfs_buffer, procfs_buffer_size);
+        ret = procfs_buffer_size;
+    }
+    return ret;
+}
+
+
+/*
     * FUNCION LLAMADA AL MOMENTO DE QUE SE ESCRIBA EL ARCHIVO EN EL PROC
     *  
  */
@@ -53,6 +73,7 @@ int init_module(void)
         return -ENOMEM;
     }
     /*PROPIEDADES DEL PROC FILE*/
+    proc_file>read_proc = procfile_read;
     proc_file->write_proc = procfile_write; //FUNCION QUE SE ENCARGA DE LA ESCRITURA
     proc_file->owner = THIS_MODULE;
     proc_file>mode = S_IFREG | S_IRUGO;
