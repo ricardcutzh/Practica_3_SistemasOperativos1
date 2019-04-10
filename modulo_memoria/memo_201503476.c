@@ -30,7 +30,7 @@ static unsigned long procfs_buffer_size = 0;
 int procfile_read(char *buffer, char **buffer_location, off_t offset, int buffer_length, int *eof, void *data)
 {
     int ret;
-    printk(KERN_INFO "procfile_read (/proc/%s) called\n", PROCFS_NAME);
+    printk(KERN_INFO "procfile_read (/proc/%s) called\n", procfs_nombre);
     if (offset > 0) {
         /* we have finished to read, return 0 */
         ret = 0;
