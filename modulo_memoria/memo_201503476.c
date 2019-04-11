@@ -26,7 +26,6 @@
 #include <linux/swap.h>
 #include <linux/vmstat.h>
 #include <linux/moduleparam.h>
-#include <stdlib.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ricardo Cutz");
