@@ -50,13 +50,14 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
 ssize_t mod_memoria_proc_read(struct file *sp_file, char __user *buf, size_t size, loff_t *offset)
 {
     int len = strlen(message);
+    /*
     read_p = !read_p;
     if(read_p)
     {
         return 0;
     }
     printk("llamada a la funciond de proc_read \n");
-    copy_to_user(buf, message, len);
+    copy_to_user(buf, message, len);*/
     return len;
 }
 
