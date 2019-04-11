@@ -17,7 +17,6 @@
 #include <linux/proc_fs.h> // ESTRUCTURA DEL SISTEMA DE ARCHIVOS Y LLAMADAS
 #include <linux/slab.h> // FUNCIONES KMALLOC Y KFREE
 #include <linux/string.h> // FUNCIONES SOBRE CADENAS
-//#include <asm-generic/uaccess.h> // COPIA DE MEMORIA
 #include <linux/uaccess.h>
 #include <linux/sched.h>
 #include <linux/fs.h>
@@ -27,6 +26,7 @@
 #include <linux/swap.h>
 #include <linux/vmstat.h>
 #include <linux/moduleparam.h>
+#include <stdlib.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ricardo Cutz");
