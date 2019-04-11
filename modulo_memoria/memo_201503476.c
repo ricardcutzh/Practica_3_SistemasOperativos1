@@ -101,7 +101,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     strcat(message, freeMem);
     strcat(message, " MB\n * Memoria Utilizada (\%): ");
     strcat(message, usage);
-    strcat(message, "\n");
+    strcat(message, "\%\n");
     return 0;
 }
 
@@ -133,7 +133,7 @@ int mod_memoria_proc_release(struct inode *sp_inode, struct file *sp_file)
 //FUNCION DE INICIO
 static int memoria_init(void)
 {
-    printk("/proc/%s create \n", ENTRY_NAME);
+    printk("carnet: 201503476\n", ENTRY_NAME);
     fops.open = mod_memoria_proc_open;
     fops.read = mod_memoria_proc_read;
     fops.release = mod_memoria_proc_release;
@@ -150,7 +150,7 @@ static int memoria_init(void)
 static void memoria_exit(void)
 {
     remove_proc_entry(ENTRY_NAME, NULL);
-    printk("/proc/%s removed \n", ENTRY_NAME);
+    printk("Sistemas Operativos 1 - Practica 3\n", ENTRY_NAME);
 }
 
 module_init(memoria_init);
