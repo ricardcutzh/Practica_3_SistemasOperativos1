@@ -42,7 +42,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
         printk("ERROR, en funcion de proc_open \n");
         return -ENOMEM;
     }
-    strcpy(message, " * 201503476!\n *Ricardo Cutz\n *Debian 9\n *Memoria Total\n *Memoria Libre\n *\% memoria utilizada\n");
+    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n *Memoria Total\n *Memoria Libre\n *\% memoria utilizada\n");
     return 0;
 }
 
@@ -56,7 +56,7 @@ ssize_t mod_memoria_proc_read(struct file *sp_file, char __user *buf, size_t siz
     {
         return 0;
     }
-    printk("llamada a la funciond de proc_read \n");
+    //printk("llamada a la funciond de proc_read \n");
     copy_to_user(buf, message, len);
     return len;
 }
@@ -64,7 +64,7 @@ ssize_t mod_memoria_proc_read(struct file *sp_file, char __user *buf, size_t siz
 // CIERRE
 int mod_memoria_proc_release(struct inode *sp_inode, struct file *sp_file)
 {
-    printk("llamada a funcion de proc_release \n");
+    //printk("llamada a funcion de proc_release \n");
     kfree(message);
     return 0;
 }
