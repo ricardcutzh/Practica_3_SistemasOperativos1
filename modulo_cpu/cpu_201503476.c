@@ -69,7 +69,7 @@ char *itoa (unsigned long value, char *result, int base)
 }
 
 //CREACION
-int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
+int mod_cpu_proc_open(struct inode *sp_inode, struct file *sp_file)
 {
     read_p = 1;
     message = kmalloc(sizeof(char)*100000, __GFP_IO | __GFP_FS);
@@ -79,7 +79,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
         return -ENOMEM;
     }
     
-    strcpy(message, " *201503476\n *Ricardo Cutz\n *Debian 9\n *Total de Memoria: \n | PID  |   NOMBRE   |   ESTADO |\n");
+    strcpy(message, " *201503476\n *Ricardo Cutz\n *Debian 9 \n -- PROCESOS -- \n | PID  |   NOMBRE   |   ESTADO |\n");
     //LISTANDO PROCESOS
     struct task_struct* task_list;
     size_t process_counter = 0;
@@ -113,7 +113,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
 }
 
 //LECTURA
-ssize_t mod_memoria_proc_read(struct file *sp_file, char __user *buf, size_t size, loff_t *offset)
+ssize_t mod_cpu_proc_read(struct file *sp_file, char __user *buf, size_t size, loff_t *offset)
 {
     int len = strlen(message);
     
@@ -128,7 +128,7 @@ ssize_t mod_memoria_proc_read(struct file *sp_file, char __user *buf, size_t siz
 }
 
 // CIERRE
-int mod_memoria_proc_release(struct inode *sp_inode, struct file *sp_file)
+int mod_cpu_proc_release(struct inode *sp_inode, struct file *sp_file)
 {
     //printk("llamada a funcion de proc_release \n");
     kfree(message);
@@ -138,12 +138,12 @@ int mod_memoria_proc_release(struct inode *sp_inode, struct file *sp_file)
 
 
 //FUNCION DE INICIO
-static int memoria_init(void)
+static int cpu_init(void)
 {
     printk("carnet: 201503476\n", ENTRY_NAME);
-    fops.open = mod_memoria_proc_open;
-    fops.read = mod_memoria_proc_read;
-    fops.release = mod_memoria_proc_release;
+    fops.open = mod_cpu_proc_open;
+    fops.read = mod_cpu_proc_read;
+    fops.release = mod_cpu_proc_release;
     if(!proc_create(ENTRY_NAME, PERMS, NULL, &fops))
     {
         printk("ERROR AL CREAR\n");
@@ -154,11 +154,11 @@ static int memoria_init(void)
 }
 
 //FUNCION DE SALIDA
-static void memoria_exit(void)
+static void cpu_exit(void)
 {
     remove_proc_entry(ENTRY_NAME, NULL);
     printk("Sistemas Operativos 1 - Practica 3\n", ENTRY_NAME);
 }
 
-module_init(memoria_init);
-module_exit(memoria_exit);
+module_init(cpu_init);
+module_exit(cpu_exit);
