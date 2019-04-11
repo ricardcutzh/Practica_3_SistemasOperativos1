@@ -18,9 +18,14 @@
 #include <linux/string.h> // FUNCIONES SOBRE CADENAS
 //#include <asm-generic/uaccess.h> // COPIA DE MEMORIA
 #include <linux/uaccess.h>
-#include <linux/sysinfo.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <linux/sched.h>
+#include <linux/fs.h>
+#include <linux/mm.h>
+#include <linux/mman.h>
+#include <linux/mmzone.h>
+#include <linux/swap.h>
+#include <linux/vmstat.h>
+#include <linux/moduleparam.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ricardo Cutz");
@@ -45,11 +50,15 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
         printk("ERROR, en funcion de proc_open \n");
         return -ENOMEM;
     }
+    /*
+        OBTENEINDO LA INFORMACION
+    */
     struct sysinfo i;
-    char *totalmemoria  = "";
-    strcat(totalmemoria, itoa(i.totalram));
-    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n");
-    strcat(message, totalmemoria);
+    si_meminfo(&i);
+    char totMem[10];
+    itoa(i.totalram << (PAGE_SHIFT - 10, totMem, 10);
+    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n *Total de Memoria\n *Total Libre\n * P utilizada\n *");
+    strcat(message, totMem);
     return 0;
 }
 
