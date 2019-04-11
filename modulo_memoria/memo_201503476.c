@@ -11,81 +11,85 @@
     * Debe imprimir el número de Carné del estudiante al cargar el módulo
     * Debe imprimir el nombre del curso al momento de descargar el módulo  
 */
+#include <linux/init.h>
 #include <linux/module.h>
-#include <linux/kernel.h>
-#include <linux/proc_fs.h>
-#include <asm/uaccess.h> /* for copy_from_user */
-#define PROCFS_MAX_SIZE 1024
+#include <linux/proc_fs> // ESTRUCTURA DEL SISTEMA DE ARCHIVOS Y LLAMADAS
+#include <linux/slab.h> // FUNCIONES KMALLOC Y KFREE
+#include <linux/string.h> // FUNCIONES SOBRE CADENAS
+#include <asm-generic/uaccess.h> // COPIA DE MEMORIA
 
-#define procfs_nombre "mem_201503476"
-/*
-    * ESTA ESTRUCTURA TIENE LA INFORMACION DEL DIRECTORIO PROC
-*/
-struct proc_dir_entry *proc_file;
-static char procfs_buffer[PROCFS_MAX_SIZE];
-static unsigned long procfs_buffer_size = 0;
-/*
-    * FUNCION QUE ES LLAMADA CUANDO EL ARCHIVO PROC ES LEIDO
-*/
-int procfile_read(char *buffer, char **buffer_location, off_t offset, int buffer_length, int *eof, void *data)
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Ricardo Cutz");
+MODULE_DESCRIPTION("Modulo de Memoria | 201503476");
+
+#define ENTRY_NAME "memo_201503476" // NOMBRE DEL ENTRY EN EL PROC
+#define PERMS 0644 //PERMISOS DEL ENTRY EN EL PROC
+#define PARENT NULL // PADRE DEL ENTRY
+
+static struct file_operations fops; //OPERACIONES CON EL ARCHIVO
+
+static char *message; //MENSAJE A DESPLEGAR EN EL PROC
+static int read_p;
+
+//CREACION
+int hello_proc_open(struct inode *sp_inode, struct file *sp_file)
 {
-    int ret;
-    printk(KERN_INFO "procfile_read (/proc/%s) called\n", procfs_nombre);
-    if (offset > 0) {
-        /* we have finished to read, return 0 */
-        ret = 0;
-    }
-    else {
-        /* fill the buffer, return the buffer size */
-        memcpy(buffer, procfs_buffer, procfs_buffer_size);
-        ret = procfs_buffer_size;
-    }
-    return ret;
-}
-
-
-/*
-    * FUNCION LLAMADA AL MOMENTO DE QUE SE ESCRIBA EL ARCHIVO EN EL PROC
-    *  
- */
-int procfile_write(struct file *file, const char *buffer, unsigned long count, void *data)
-{
-    /* get buffer size */
-    procfs_buffer_size = count;
-    if (procfs_buffer_size > PROCFS_MAX_SIZE ) {
-        procfs_buffer_size = PROCFS_MAX_SIZE;
-    }
-    /* write data to the buffer */
-    if ( copy_from_user(procfs_buffer, buffer, procfs_buffer_size) ) {
-        return −EFAULT;
-    }
-    return procfs_buffer_size;
-}
-
-int init_module(void)
-{
-    /*CREANDO EL ARCHIVO PROC*/
-    proc_file = create_proc_entry(procfs_nombre, 0644, NULL);
-    if(proc_file == NULL)
+    printk("llamada a la funcion de proc_open \n");
+    read_p = 1;
+    message = kmalloc(sizeof(char)*20, _GFP_WAIT | _GFP_IO | _GFP_FS);
+    if(message == NULL)
     {
-        remove_proc_entry(procfs_nombre, &proc_root);
-        printk(KERN_INFO "<ERROR> NO SE PUDO CREAR EL ARCHIVO %s \n", procfs_nombre);
+        printk("ERROR, en funcion de proc_open \n");
         return -ENOMEM;
     }
-    /*PROPIEDADES DEL PROC FILE*/
-    proc_file>read_proc = procfile_read;
-    proc_file->write_proc = procfile_write; //FUNCION QUE SE ENCARGA DE LA ESCRITURA
-    proc_file->owner = THIS_MODULE;
-    proc_file>mode = S_IFREG | S_IRUGO;
-    proc_file>uid = 0;
-    proc_file>gid = 0;
-    proc_file>size = 777;
-    printk(KERN_INFO "Carnet: 201503476 \n");
+    strcpy(message, "Hola Mundo!\n");
     return 0;
 }
 
-void cleanup_module(void)
+//LECTURA
+ssize_t hello_proc_read(struct file *sp_file, char _user *buf, size_t size, loff_t *offset)
 {
-    remove_proc_entry(procfs_nombre, &proc_root);
-    printk(KERN_INFO "Sistemas Operativos 1\n");
+    int len = strlen(message);
+    read_p = !read_p;
+    if(read_p)
+    {
+        return 0;
+    }
+    printk("llamada a la funciond de proc_read \n");
+    copy_to_user(buf, message, len);
+    return len;
 }
+
+// CIERRE
+int hello_proc_release(struct inode *sp_inode, struct file *sp_file)
+{
+    printk("llamada a funcion de proc_release \n");
+    kfree(message);
+    return 0;
+}
+
+//FUNCION DE INICIO
+static int hello_init(void)
+{
+    printk("/proc/%s create \n", ENTRY_NAME);
+    fops.open = hello_proc_open;
+    fops.read = hello_proc_read;
+    fops.release = hello_proc_release;
+    if(!proc_create(ENTRY_NAME, PERMS, NULL, &fops))
+    {
+        printk("ERROR AL CREAR\n");
+        remove_proc_entry(ENTRY_NAME, NULL);
+        return -ENOMEM;
+    }
+    return 0;
+}
+
+//FUNCION DE SALIDA
+static void hello_exit(void)
+{
+    remove_proc_entry(ENTRY_NAME, NULL);
+    printk("/proc/%s removed \n", ENTRY_NAME);
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
