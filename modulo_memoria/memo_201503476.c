@@ -18,6 +18,7 @@
 #include <linux/string.h> // FUNCIONES SOBRE CADENAS
 //#include <asm-generic/uaccess.h> // COPIA DE MEMORIA
 #include <linux/uaccess.h>
+#include <linux/sysinfo.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ricardo Cutz");
@@ -42,7 +43,8 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
         printk("ERROR, en funcion de proc_open \n");
         return -ENOMEM;
     }
-    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n *Memoria Total\n *Memoria Libre\n *\% memoria utilizada\n");
+    struct sysinfo i;
+    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n *%i\n *Memoria Libre\n *\% memoria utilizada\n", i.totalram);
     return 0;
 }
 
