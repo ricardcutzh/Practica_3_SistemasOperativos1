@@ -24,6 +24,10 @@
 #include <linux/swap.h>
 #include <linux/vmstat.h>
 #include <linux/moduleparam.h>
+#include <linux/sched/signal.h>
+#include <linux/sched/hotplug.h>
+#include <linux/sched/task.h>
+#include <linux/sched/smt.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ricardo Cutz");
@@ -80,7 +84,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     struct task_struct* task_list;
     size_t process_counter = 0;
     for_each_process(task_list) {
-        /*char PID[10];
+        char PID[10];
         itoa((long)task_list->pid, PID, 10);
         char NOM[16];
         strcpy(NOM,task_list->comm);
@@ -102,7 +106,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
         strcat(message, NOM);
         strcat(message, " | ");
         strcat(message, STADO);
-        strcat(message, " | \n");*/
+        strcat(message, " | \n");
         ++process_counter;
     }
     return 0;
