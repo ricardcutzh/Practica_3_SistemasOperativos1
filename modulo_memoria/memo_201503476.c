@@ -12,6 +12,7 @@
     * Debe imprimir el nombre del curso al momento de descargar el módulo  
 */
 #include <linux/init.h>
+#include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/proc_fs.h> // ESTRUCTURA DEL SISTEMA DE ARCHIVOS Y LLAMADAS
 #include <linux/slab.h> // FUNCIONES KMALLOC Y KFREE
