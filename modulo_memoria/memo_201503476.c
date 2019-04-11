@@ -44,7 +44,10 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
         return -ENOMEM;
     }
     struct sysinfo i;
-    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n *%i\n *Memoria Libre\n *\% memoria utilizada\n", i.totalram);
+    char *totalmemoria  = "";
+    strcat(totalmemoria, itoa(i.totalram));
+    strcpy(message, " *201503476!\n *Ricardo Cutz\n *Debian 9\n");
+    strcat(message, totalmemoria);
     return 0;
 }
 
