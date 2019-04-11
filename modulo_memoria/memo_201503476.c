@@ -90,9 +90,9 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     // % utilizada
     unsigned long tot = (i.totalram << (PAGE_SHIFT - 10))/1000;
     unsigned long fr = (i.freeram << (PAGE_SHIFT - 10))/1000;
-    unsigned long porUtil = ((tot - fr)/tot)*100;
+    uint64_t porUtil = ((tot - fr)/tot)*100;
     char usage[10];
-    itoa((porUtil/1000)<< (PAGE_SHIFT - 10) , usage, 10);
+    itoa((long)porUtil , usage, 10);
 
     strcpy(message, " *201503476\n *Ricardo Cutz\n *Debian 9\n *Total de Memoria: ");
     //strcpy(message, totMem);
