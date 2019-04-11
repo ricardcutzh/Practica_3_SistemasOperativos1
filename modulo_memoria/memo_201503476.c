@@ -82,7 +82,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     struct sysinfo i;
     si_meminfo(&i);
     char totMem[10];
-    itoa(i.totalram << (PAGE_SHIFT - 10), totMem, 10);
+    itoa((i.totalram/1000) << (PAGE_SHIFT - 10), totMem, 10);
     strcpy(message, " *201503476\n *Ricardo Cutz\n *Debian 9\n *Total de Memoria\n *Total Libre\n * P utilizada\n *");
     //strcpy(message, totMem);
     strcat(message, totMem);
