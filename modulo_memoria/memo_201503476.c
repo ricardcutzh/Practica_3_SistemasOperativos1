@@ -13,7 +13,7 @@
 */
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/proc_fs> // ESTRUCTURA DEL SISTEMA DE ARCHIVOS Y LLAMADAS
+#include <linux/proc_fs.h> // ESTRUCTURA DEL SISTEMA DE ARCHIVOS Y LLAMADAS
 #include <linux/slab.h> // FUNCIONES KMALLOC Y KFREE
 #include <linux/string.h> // FUNCIONES SOBRE CADENAS
 #include <asm-generic/uaccess.h> // COPIA DE MEMORIA
