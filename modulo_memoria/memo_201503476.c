@@ -83,12 +83,14 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     si_meminfo(&i);
     // MEMORIA TOTAL
     char totMem[10];
-    itoa((i.totalram/1000) << (PAGE_SHIFT - 10), totMem, 10);
+    itoa((i.totalram << (PAGE_SHIFT - 10))/1000, totMem, 10);
     // MEMORIA LIBRE
     char freeMem[10];
-    itoa((i.freeram/1000) << (PAGE_SHIFT - 10), freeMem, 10);
+    itoa((i.freeram << (PAGE_SHIFT - 10))/1000, freeMem, 10);
     // % utilizada
-    unsigned long porUtil = ((i.totalram - i.freeram)/i.totalram)*100;
+    unsigned long tot = (i.totalram << (PAGE_SHIFT - 10))/1000;
+    unsigned long fr = (i.freeram << (PAGE_SHIFT - 10))/1000;
+    unsigned long porUtil = ((tot - fr)/tot)*100;
     char usage[10];
     itoa((porUtil/1000)<< (PAGE_SHIFT - 10) , usage, 10);
 
