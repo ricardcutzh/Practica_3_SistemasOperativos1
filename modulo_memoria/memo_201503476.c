@@ -90,7 +90,7 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     // % utilizada
     unsigned long tot = (i.totalram << (PAGE_SHIFT - 10))/1000;
     unsigned long fr = (i.freeram << (PAGE_SHIFT - 10))/1000;
-    uint64_t porUtil = ((tot - fr)/tot)*100;
+    uint64_t porUtil = ((tot - fr)*100/tot);
     char usage[10];
     itoa((long)porUtil , usage, 10);
 
