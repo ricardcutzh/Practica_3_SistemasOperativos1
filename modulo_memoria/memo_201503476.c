@@ -70,7 +70,7 @@ char *itoa (unsigned long value, char *result, int base)
 int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
 {
     read_p = 1;
-    message = kmalloc(sizeof(char)*100, __GFP_IO | __GFP_FS);
+    message = kmalloc(sizeof(char)*200, __GFP_IO | __GFP_FS);
     if(message == NULL)
     {
         printk("ERROR, en funcion de proc_open \n");
@@ -81,11 +81,24 @@ int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
     */
     struct sysinfo i;
     si_meminfo(&i);
+    // MEMORIA TOTAL
     char totMem[10];
     itoa((i.totalram/1000) << (PAGE_SHIFT - 10), totMem, 10);
-    strcpy(message, " *201503476\n *Ricardo Cutz\n *Debian 9\n *Total de Memoria\n *Total Libre\n * P utilizada\n *");
+    // MEMORIA LIBRE
+    char freeMem[10];
+    itoa((i.freeram/1000) << (PAGE_SHIFT - 10), freeMem, 10);
+    // % utilizada
+    unsigned long porUtil = (100 - ((i.freeram*100)/i.totalram))/1000;
+    char usage[10];
+    itoa(porUtil << (PAGE_SHIFT - 10), usage, 10);
+
+    strcpy(message, " *201503476\n *Ricardo Cutz\n *Debian 9\n *Total de Memoria: ");
     //strcpy(message, totMem);
     strcat(message, totMem);
+    strcat(message, " MB\n * Memoria Libre: ");
+    strcat(message, freeMem);
+    strcat(message, " MB\n * Memoria Utilizada (\%): ");
+    strcat(message, usage);
     strcat(message, "\n");
     return 0;
 }
