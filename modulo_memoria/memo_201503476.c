@@ -19,6 +19,8 @@
 //#include <asm-generic/uaccess.h> // COPIA DE MEMORIA
 #include <linux/uaccess.h>
 #include <linux/sysinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ricardo Cutz");
