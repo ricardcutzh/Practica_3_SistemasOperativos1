@@ -36,7 +36,7 @@ int hello_proc_open(struct inode *sp_inode, struct file *sp_file)
 {
     printk("llamada a la funcion de proc_open \n");
     read_p = 1;
-    message = kmalloc(sizeof(char)*20, _GFP_WAIT | _GFP_IO | _GFP_FS);
+    message = kmalloc(sizeof(char)*20, __GFP_WAIT | __GFP_IO | __GFP_FS);
     if(message == NULL)
     {
         printk("ERROR, en funcion de proc_open \n");
@@ -47,7 +47,7 @@ int hello_proc_open(struct inode *sp_inode, struct file *sp_file)
 }
 
 //LECTURA
-ssize_t hello_proc_read(struct file *sp_file, char _user *buf, size_t size, loff_t *offset)
+ssize_t hello_proc_read(struct file *sp_file, char __user *buf, size_t size, loff_t *offset)
 {
     int len = strlen(message);
     read_p = !read_p;
