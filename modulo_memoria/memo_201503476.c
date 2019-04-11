@@ -33,22 +33,21 @@ static char *message; //MENSAJE A DESPLEGAR EN EL PROC
 static int read_p;
 
 //CREACION
-int hello_proc_open(struct inode *sp_inode, struct file *sp_file)
+int mod_memoria_proc_open(struct inode *sp_inode, struct file *sp_file)
 {
-    printk("llamada a la funcion de proc_open \n");
     read_p = 1;
-    message = kmalloc(sizeof(char)*20, __GFP_IO | __GFP_FS);
+    message = kmalloc(sizeof(char)*100, __GFP_IO | __GFP_FS);
     if(message == NULL)
     {
         printk("ERROR, en funcion de proc_open \n");
         return -ENOMEM;
     }
-    strcpy(message, "Hola Mundo!\n");
+    strcpy(message, " * 201503476!\n *Ricardo Cutz\n *Debian 9\n *Memoria Total\n *Memoria Libre\n *\% memoria utilizada\n");
     return 0;
 }
 
 //LECTURA
-ssize_t hello_proc_read(struct file *sp_file, char __user *buf, size_t size, loff_t *offset)
+ssize_t mod_memoria_proc_read(struct file *sp_file, char __user *buf, size_t size, loff_t *offset)
 {
     int len = strlen(message);
     read_p = !read_p;
@@ -62,7 +61,7 @@ ssize_t hello_proc_read(struct file *sp_file, char __user *buf, size_t size, lof
 }
 
 // CIERRE
-int hello_proc_release(struct inode *sp_inode, struct file *sp_file)
+int mod_memoria_proc_release(struct inode *sp_inode, struct file *sp_file)
 {
     printk("llamada a funcion de proc_release \n");
     kfree(message);
@@ -70,12 +69,12 @@ int hello_proc_release(struct inode *sp_inode, struct file *sp_file)
 }
 
 //FUNCION DE INICIO
-static int hello_init(void)
+static int memoria_init(void)
 {
     printk("/proc/%s create \n", ENTRY_NAME);
-    fops.open = hello_proc_open;
-    fops.read = hello_proc_read;
-    fops.release = hello_proc_release;
+    fops.open = mod_memoria_proc_open;
+    fops.read = mod_memoria_proc_read;
+    fops.release = mod_memoria_proc_release;
     if(!proc_create(ENTRY_NAME, PERMS, NULL, &fops))
     {
         printk("ERROR AL CREAR\n");
@@ -86,11 +85,11 @@ static int hello_init(void)
 }
 
 //FUNCION DE SALIDA
-static void hello_exit(void)
+static void memoria_exit(void)
 {
     remove_proc_entry(ENTRY_NAME, NULL);
     printk("/proc/%s removed \n", ENTRY_NAME);
 }
 
-module_init(hello_init);
-module_exit(hello_exit);
+module_init(memoria_init);
+module_exit(memoria_exit);
