@@ -138,7 +138,7 @@ int mod_cpu_proc_release(struct inode *sp_inode, struct file *sp_file)
 
 
 //FUNCION DE INICIO
-static int cpu_init(void)
+static int cpu_mod_init(void)
 {
     printk("carnet: 201503476\n", ENTRY_NAME);
     fops.open = mod_cpu_proc_open;
@@ -154,11 +154,11 @@ static int cpu_init(void)
 }
 
 //FUNCION DE SALIDA
-static void cpu_exit(void)
+static void cpu_mod_exit(void)
 {
     remove_proc_entry(ENTRY_NAME, NULL);
     printk("Sistemas Operativos 1 - Practica 3\n", ENTRY_NAME);
 }
 
-module_init(cpu_init);
-module_exit(cpu_exit);
+module_init(cpu_mod_init);
+module_exit(cpu_mod_exit);
