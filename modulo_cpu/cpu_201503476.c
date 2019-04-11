@@ -38,17 +38,6 @@ static struct file_operations fops; //OPERACIONES CON EL ARCHIVO
 static char *message; //MENSAJE A DESPLEGAR EN EL PROC
 static int read_p;
 
-/*IMPRIMIENDO PROCESOS*/
-void procs_info_print(void)
-{
-        struct task_struct* task_list;
-        size_t process_counter = 0;
-        for_each_process(task_list) {
-                pr_info("== %s [%d]\n", task_list->comm, task_list->pid);
-                ++process_counter;
-        }
-        printk(KERN_INFO "== Number of process: %zu\n", process_counter);
-}
 //FUNCION AUXILIAR ITOA
 char *itoa (unsigned long value, char *result, int base)
 {
